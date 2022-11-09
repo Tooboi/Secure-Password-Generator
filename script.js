@@ -26,29 +26,38 @@ function generatePassword() {
     const arSpecial = ["!", "@", "#", "$", "%", "&", "*", "?", "_", "-", "^"];
     //define master list of chars
     var masterList = [];
+    //define list of chosen types
+    var chosen = [];
     //add each list to master list if user selects it
     //ps had to add numFix to add the list to the main list enough times
     //that you can get a full 128 char password with just one selection
+    //add to list of chosen types for validation
     if (promptNumbers === true) {
-        var numFix = 13;
-        for (var i = 0; i < numFix; i++)
-        var masterList = arNumbers.concat(masterList);
+        for (var i = 0; i < 13; i++) {
+          var masterList = arNumbers.concat(masterList);  
+        }
+        chosen.push(" numbers")
     }
     if (promptLowercase === true) {
-        var numFix = 5;
-        for (var i = 0; i < numFix; i++)
-        var masterList = arLowercase.concat(masterList);
+        for (var i = 0; i < 5; i++) {
+        var masterList = arLowercase.concat(masterList);            
+        }
+        chosen.push(" lowercase letters")
     }
     if (promptUppercase === true) {
-        var numFix = 5;
-        for (var i = 0; i < numFix; i++)
-        var masterList = arUppercase.concat(masterList);
+        for (var i = 0; i < 5; i++) {
+        var masterList = arUppercase.concat(masterList);            
+        }
+        chosen.push(" uppercase letters")
     }
     if (promptSpecial === true) {
-        var numFix = 12;
-        for (var i = 0; i < numFix; i++)
-        var masterList = arSpecial.concat(masterList);  
-    }
+        for (var i = 0; i < 12; i++) {
+        var masterList = arSpecial.concat(masterList);            
+        }
+        chosen.push(" special characters")
+    } 
+
+
     //if no choices were selected 
     if (!promptSpecial && 
         !promptUppercase && 
@@ -56,7 +65,11 @@ function generatePassword() {
         !promptNumbers) {
             window.alert("You must select at least one character type. Lowercase letters were selected as a default")
             var masterList = arLowercase.concat(masterList);
+            chosen.push("lowercase letters")
     } 
+    //add strings in chosen array and alert user
+    chosen = chosen.join()
+    window.alert("Your password will be " + promptLength + " characters long and contain" + chosen + ".")
     //shuffles the main list of chosen chars
     masterList.sort(() => Math.random() - 0.5);
     //sets length of password as a slice of the masterList starting at 0
