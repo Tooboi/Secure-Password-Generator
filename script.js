@@ -27,16 +27,26 @@ function generatePassword() {
     //define master list of chars
     var masterList = [];
     //add each list to master list if user selects it
+    //ps had to add numFix to add the list to the main list enough times
+    //that you can get a full 128 char password with just one selection
     if (promptNumbers === true) {
+        var numFix = 13;
+        for (var i = 0; i < numFix; i++)
         var masterList = arNumbers.concat(masterList);
     }
     if (promptLowercase === true) {
+        var numFix = 5;
+        for (var i = 0; i < numFix; i++)
         var masterList = arLowercase.concat(masterList);
     }
     if (promptUppercase === true) {
+        var numFix = 5;
+        for (var i = 0; i < numFix; i++)
         var masterList = arUppercase.concat(masterList);
     }
     if (promptSpecial === true) {
+        var numFix = 12;
+        for (var i = 0; i < numFix; i++)
         var masterList = arSpecial.concat(masterList);  
     }
     //if no choices were selected 
