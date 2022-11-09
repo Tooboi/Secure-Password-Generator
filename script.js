@@ -16,106 +16,83 @@
 
 
 
+
+
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
 
-
-
-function randomInt(min, max) {
-  if (!max) {
-    max = min;
-    min = 0;
-  }
-  var rand = Math.random();
-  return Math.floor(min*(1 - rand) + rand*max)
-}
-
-function getRandomItem(list) {
-  return list[randomInt(list.length)];
-}
-
-
-
-//password generation function
+//password generator
 function generatePassword() {
-  //prompt user - store response in var
-  var amount = window.prompt('Input desired length of password (8 - 128 characters)');
+    //ask length from user store in askLength
+    var promptLength = window.prompt("How many characters would you like in your password (8 - 128)");
+    //if not a number return
+    if (isNaN(promptLength)) {
+        window.alert("Must be a number between 8 and 128");
+        return;
+    }
+    //if outside length parameters return
+    if (promptLength < 8 || promptLength > 128) {
+        window.alert("Please choose a number between 8 and 128");
+        return;
+    }
+    //ask for char types
+    var promptNumbers = window.confirm("Would you like your password to include numbers?");
+    var promptLowercase = window.confirm("Would you like your password to include lowercase letters?");
+    var promptUppercase = window.confirm("Would you like your password to include uppercase letters?");
+    var promptSpecial = window.confirm("Would you like your password to include special characters?");
+    //arrays of options for each case
+    const arLowercase = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+    const arUppercase = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+    const arNumbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    const arSpecial = ["!", "@", "#", "$", "%", "&", "*", "?", "_", "-", "^"];
+    //define master list of chars
+    var masterList = [];
+    //add each list to master list if user selects it
+    if (promptNumbers === true) {
+        var masterList = arNumbers.concat(masterList);
+    }
+    if (promptLowercase === true) {
+        var masterList = arLowercase.concat(masterList);
+    }
+    if (promptUppercase === true) {
+        var masterList = arUppercase.concat(masterList);
+    }
+    if (promptSpecial === true) {
+        var masterList = arSpecial.concat(masterList);  
+    }
+    //if no choices were selected 
+    if (!promptSpecial && 
+        !promptUppercase && 
+        !promptLowercase && 
+        !promptNumbers) {
+            window.alert("You must select at least one character type. Lowercase letters were selected as a default")
+            var masterList = arLowercase.concat(masterList);
+    } 
+    
+    //shuffles the main list of chosen chars
+    masterList.sort(() => Math.random() - 0.5);
+    //sets length of password as a slice of the masterList starting at 0
+    var postList = masterList.slice(0, promptLength);
+    //combines the array into a single string
+    var finalPass = (postList.join(''));
+        
+    // console.log("Password length is " + promptLength);
+    // console.log("masterList is " + masterList);
+    // console.log("postList is " + postList);
+    // console.log("finalPass is " + finalPass);
 
-  //convert response to number
-  var passLength = parseInt(amount);
-
-  //if input is not a number give alert message
-  if (isNaN(passLength)) {
-    window.alert('Thats not a number please return to school :)');
-    return;
-  } 
-
-  //if input length is outside 8 and 128 then alert and start over
-  if (passLength < 8 || passLength > 128) {
-    window.alert("Password must be between 8 and 128 characters");
-    return;
-  } 
-
-  //prompt user for each type of char
-  var askLowercase = window.confirm("Include lowercase letters in your password?");
-  var askUppercase = window.confirm("Include uppercase letters in your password?");
-  var askNumbers = window.confirm("Include numbers in your password?");
-  var askSpecial = window.confirm("Include special characters in your password?");
-
-  //arrays of each category to choose from
-  var listLowercase = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-  var listUppercase = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
-  var listNumbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-  var listSpecial = ["!", "@", "#", "$", "%", "&", "*", "?", "_", "-", "^"];
-  //put arrays into container array
-  var listPass = []
-
-  //if user wants numbers - include numbers list ect
-  if (askLowercase === true) {
-    listPass.push(listLowercase);
-  }
-  if (askUppercase === true) {
-    listPass.push(listUppercase);
-  }
-  if (askNumbers === true) {
-    listPass.push(listNumbers);
-  }
-  if (askSpecial === true) {
-    listPass.push(listSpecial);
-  }
-  if (listPass.length === 0) {
-    listPass.push(listLowercase)
-    window.alert("For a more secure password it is recommended to choose more catagories but you do you - Your password will default to lowercase letters only")
-  }
-  
-  //empty string to hold future generated password
-  var genPass = "";
-
-  //iterate over lists to choose random list then random char
-  for (var i = 0; i < passLength; i++) {
-    var randomItem = getRandomItem(listPass)
-    var randomChar = getRandomItem(randomItem)
-    genPass += randomChar;
-  }
-
-  //return to where this function was originally called
-  return genPass;
+    //sends final password out
+    return(finalPass);
 }
-
 
 // Write password to the #password input
 function writePassword() {
-  //password = generate password function
   var password = generatePassword();
-
-  //passwordText to be written in the password id
   var passwordText = document.querySelector("#password");
 
-  // change password text to password variable
   passwordText.value = password;
 
 }
 
-// Add event listener to the generate button
-//whenever you click button writePassword will run
+// Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
