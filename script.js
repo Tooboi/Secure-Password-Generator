@@ -56,8 +56,6 @@ function generatePassword() {
         }
         chosen.push(" special characters")
     } 
-
-
     //if no choices were selected 
     if (!promptSpecial && 
         !promptUppercase && 
